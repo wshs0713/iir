@@ -47,16 +47,15 @@ def variational_bayes(args):
     predicts = []
     for _ in range(10):
         Y = numpy.concatenate([numpy.random.choice(D, n, p=pb) for pb, n in zip(P, true_count)])
+        numpy.random.shuffle(Y)
 
         X = numpy.random.random((N,D)) # P(X_n)
         X = (X.T/X.sum(axis=1)).T
         c = X.sum(axis=0)
 
         pre = c / c.sum()
-        index = numpy.arange(N)
         for epoch in range(200):
-            #numpy.random.shuffle(index)
-            for n in index:
+            for n in range(N):
                 c -= X[n,:]
                 x = P[:,Y[n]] * (alpha + c)
                 z = X[n,:] = x / x.sum()
